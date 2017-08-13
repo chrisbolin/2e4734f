@@ -8,7 +8,7 @@ const prepareChildren = children => Children.toArray(children).filter(el => type
 const GridElement = ({index, base, children}) => {
 	const row = (index % base);
 	const column = floor(index / base);
-	const transform = `translate(${row * base},${column * base})`;
+	const transform = `translate(${row * base + base/2},${column * base + base/2})`;
 
 	return (
 		<g transform={transform}>
@@ -44,17 +44,20 @@ const Tile = ({ frame, index, row, column }) => {
 
 	const distance = sqrt( pow(row-4.5, 2) + pow(column-4.5, 2) );
 	const adjustedFrame = (distanceWeight * distance + frame) % time.total;
-	let progress = 0;
+	let progress = -1;
 
 	if (adjustedFrame > time.delay) progress = cos(PI*(adjustedFrame - time.delay)/time.animation);
 	if (adjustedFrame > (time.delay + time.animation)) progress = 1;
 
-	const rotate = 90 * progress;
+	const colorA = `hsla(${180 + 120 * progress}, 80%, 50%, 1.0)`;
+	const colorB = `hsla(${180 - 120 * progress}, 80%, 50%, 1.0)`;
+
+	const rotate = 45 * progress;
 	return (
-		<g transform={`rotate(${rotate} 6 6)`}>
-			<rect x={2} y={5.5} width={8} height={1} fill="grey" />
-			<rect x={5.5} y={2} width={1} height={8} fill="grey" />
-			<rect x={5.5} y={5.5} width={1} height={1} fill="white" />
+		<g transform={`rotate(${rotate} 0 0) scale(2)`}>
+			<rect x={-3} y={-1} width={6} height={2} fill={colorA} />
+			<rect x={-1} y={-3} width={2} height={6} fill={colorB} />
+			<rect x={-1} y={-1} width={2} height={2} fill="hsl(0, 0%, 20%)" />
 		</g>
 	);
 };
