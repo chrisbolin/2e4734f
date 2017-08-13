@@ -1,7 +1,7 @@
 import React, { Component, cloneElement, Children } from 'react';
 import { range } from 'lodash';
 
-const { floor, sqrt, pow, cos } = Math;
+const { floor, sqrt, pow, cos, PI } = Math;
 
 const prepareChildren = children => Children.toArray(children).filter(el => typeof el !== 'string');
 
@@ -35,15 +35,21 @@ const Grid = ({ children }) => {
 };
 
 const Tile = ({ frame, index, row, column }) => {
-	const duration = 50;
+	const time = {
+		total: 100,
+		delay: 20,
+		animation: 30,
+	};
+	const distanceWeight = 4;
+
 	const distance = sqrt( pow(row-4.5, 2) + pow(column-4.5, 2) );
+	const adjustedFrame = (distanceWeight * distance + frame) % time.total;
 	let progress = 0;
 
-	const adjustedFrame = (15 * distance + 1.5 * frame) % 200;
-	if (adjustedFrame > 100) progress = (adjustedFrame - 100)/duration;
-	if (adjustedFrame > (100 + duration)) progress = 1;
+	if (adjustedFrame > time.delay) progress = cos(PI*(adjustedFrame - time.delay)/time.animation);
+	if (adjustedFrame > (time.delay + time.animation)) progress = 1;
 
-	const rotate = 270 * progress;
+	const rotate = 90 * progress;
 	return (
 		<g transform={`rotate(${rotate} 6 6)`}>
 			<rect x={2} y={5.5} width={8} height={1} fill="grey" />
