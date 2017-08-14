@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "chrome-remote-interface": "^0.24.3",
+    "nightmare": "^2.10.0"
+  }
+}
