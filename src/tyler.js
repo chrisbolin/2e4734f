@@ -17,12 +17,13 @@ const GridElement = ({index, base, children}) => {
 	);
 };
 
-export const Grid = ({ children }) => {
+export const Grid = ({ children, background = null }) => {
 	const viewBox = `0 0 100 100`;
 	const base = 10;
 	const childrenElements = prepareChildren(children);
 	return (
 		<svg viewBox={viewBox}>
+			{background}
 			{
 				range(100).map(index =>
 					<GridElement index={index} base={base} key={index}>
