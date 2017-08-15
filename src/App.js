@@ -24,7 +24,7 @@ const Tile = ({ frame, index, row, column }) => {
 	const colorB = `hsla(${180 - 120 * progress}, 80%, 50%, 1.0)`;
 
 	const rotate = 45 * progress;
-	const scale = 1 + (1 - 1 * Math.abs(progress))/distance;
+	const scale = 1 + 10 * (1 - Math.abs(progress))/(distance + 10);
 
 	const backgroundLightness = cos(2 * PI * longProgress) * 10 + 90;
 	const backgroundColor = `hsl(180, 50%, ${backgroundLightness}%)`;
