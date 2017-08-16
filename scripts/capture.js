@@ -1,23 +1,30 @@
+const { unlink } = require('fs');
+const { resolve } = require('path');
 const Nightmare = require('nightmare');
 const { range, padStart } = require('lodash');
+const { size, frames } = require('../src/settings');
 const nightmare = Nightmare({ show: true });
 
 const screenshotPath = index =>
-	`${__dirname}/captures/002/${padStart(index, 4, '0')}.png`;
+	resolve(`${__dirname}/../captures/${padStart(index, 4, '0')}.png`);
 
-console.log(screenshotPath(1))
+// note: frames divided by 2, as we step() 2x each gif frame
 
-range(25).reduce(function(accumulator, index) {
+range(frames/2).reduce(function(accumulator, index) {
   return accumulator.then(function(results) {
     return nightmare
 			.goto('http://localhost:3001/')
-			.viewport(600, 622)
+			.viewport(size, size)
 			.evaluate(function () {
 				window.piece.step();
 				window.piece.step();
 			})
-			.screenshot(screenshotPath(index))
+			.screenshot(
+				screenshotPath(index),
+				{ x: 0, y: 0, width: size/2, height: size/2 }
+			)
   });
 }, Promise.resolve([]))
 .then(function(results){
+	process.exit();
 });

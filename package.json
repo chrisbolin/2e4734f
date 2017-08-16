@@ -12,6 +12,9 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
+		"make": "npm run clean && npm run capture && npm run gif",
+    "clean": "rm -f ./captures/*",
+		"capture": "node ./scripts/capture",
+    "gif": "file=gifs/gif-$(date +'%Y-%m-%d_%H-%M-%S').gif && magick -delay 3 ./captures/*.png $file && open -a 'Google Chrome' $file"
   }
 }

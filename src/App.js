@@ -1,19 +1,21 @@
 import React, { Component } from 'react';
 import { Grid } from './tyler';
+import { size, frames } from './settings';
 
 const { sqrt, pow, cos, PI } = Math;
 
+const CAPTURING = navigator.userAgent.match(/Electron/);
+
 const Tile = ({ frame, index, row, column }) => {
 	const time = {
-		total: 100,
-		delay: 70,
+		delay: 30,
 		animation: 30,
 	};
 	const distanceWeight = 4;
 
 	const backgroundShift = 30;
 	const distance = sqrt( pow(row-4.5, 2) + pow(column-4.5, 2) );
-	const adjustedFrame = (distanceWeight * distance + frame) % time.total;
+	const adjustedFrame = (distanceWeight * distance + frame) % frames;
 	let progress = -1;
 
 	if (adjustedFrame > time.delay) progress = cos(PI*(adjustedFrame - time.delay)/time.animation);
@@ -39,8 +41,11 @@ class App extends Component {
 		super();
 		this.state = {
 			frame: 0,
-			run: !navigator.userAgent.match(/Electron/), // don't run if in Electron
+			run: !CAPTURING,
 		};
+		this.divStyle = CAPTURING ?
+			{ width: size/2, height: size/2 }
+			: { width: size, height: size }
 	}
 	componentDidMount() {
 		this.start();
@@ -65,7 +70,7 @@ class App extends Component {
 	}
   render() {
     return (
-      <div style={{width: 600, height: 600}}>
+      <div style={this.divStyle}>
 				<Grid background={<rect width={100} height={100} fill="white"/>}>
 					<Tile frame={this.state.frame}/>
 				</Grid>
